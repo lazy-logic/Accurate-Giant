@@ -179,10 +179,14 @@ export function Hero() {
 
             <h1 className="text-5xl md:text-6xl xl:text-7xl text-brand-ink text-balance">
               <span className="block">Real games.</span>
-              <TypewriterRotate
-                words={ROTATING_WORDS}
-                className="text-brand-primary"
-              />
+              {/* Typewriter sized one step down so it sits as a subtle accent
+                  under the static lead instead of competing with it. */}
+              <span className="block text-4xl md:text-5xl xl:text-6xl mt-1">
+                <TypewriterRotate
+                  words={ROTATING_WORDS}
+                  className="text-brand-primary"
+                />
+              </span>
             </h1>
 
             <p className="mt-6 text-base md:text-lg text-brand-ink-muted leading-relaxed max-w-xl text-balance">

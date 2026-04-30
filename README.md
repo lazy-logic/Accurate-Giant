@@ -1,6 +1,6 @@
 # Accurate Giant Company Ltd. — website
 
-Marketing and information site for an NLA-registered private lotto operator in Ghana. Built per the spec in [AccurateGiant_SuperPrompt.md](AccurateGiant_SuperPrompt.md).
+Marketing and information site for an NLA-registered private lotto operator in Ghana.
 
 ---
 

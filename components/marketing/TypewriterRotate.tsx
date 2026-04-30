@@ -52,6 +52,17 @@ export function TypewriterRotate({
   }, []);
 
   useEffect(() => {
+    // Guards against:
+    //  1. Empty words array (no-op)
+    //  2. Out-of-bounds index (Fast Refresh can leave stale state when the
+    //     words array shrinks — e.g. went from 5 to 3 entries — and the
+    //     stored index points past the new end. Snap it back to 0.)
+    if (words.length === 0) return;
+    if (index >= words.length) {
+      setIndex(0);
+      return;
+    }
+
     if (reducedMotion) {
       // Cross-fade variant: just swap the full word every few seconds.
       setText(words[index]);
