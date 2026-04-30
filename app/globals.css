@@ -1,0 +1,222 @@
+/*
+ * Global styles + Tailwind v4 design tokens.
+ *
+ * Tailwind v4 is CSS-first — every token defined inside @theme automatically
+ * generates a matching utility (e.g. --color-brand-primary becomes bg-brand-primary,
+ * text-brand-primary, border-brand-primary). There is no tailwind.config.ts.
+ *
+ * SINGLE SOURCE OF TRUTH for design tokens: docs/brand-tokens.md and docs/design-system.md.
+ * Components should NEVER hardcode hex values, font names, or radius pixels — always
+ * reference a token below. If you need a new token, add it here first, then use it.
+ */
+@import "tailwindcss";
+
+@theme {
+  /* Brand — locked, source: docs/brand-tokens.md */
+  --color-brand-primary: #013299;
+  --color-brand-secondary: #00b9ef;
+
+  /* Neutral grey ramp — locked */
+  --color-brand-ink: #1a1f2b;
+  --color-brand-ink-muted: #5b6473;
+  --color-brand-paper: #ffffff;
+  --color-brand-paper-muted: #f5f6f8;
+  --color-brand-paper-sunken: #eceef2;
+  --color-brand-border: #d9dde5;
+  --color-brand-border-strong: #a7aebc;
+
+  /* State — DRAFT */
+  --color-brand-success: #0e8c4d;
+  --color-brand-warning: #c77a00;
+  --color-brand-danger: #c0392b;
+
+  /* Type — Montserrat (display) + Inter (body). See ADR 0009. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale — modular 1.333 (perfect fourth). Bigger steps than the
+   * previous 1.250 so display sizes feel confidently large rather than
+   * polite. See docs/design-system.md §1.2. */
+  --text-2xs: 0.633rem;
+  --text-xs: 0.750rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.333rem;
+  --text-2xl: 1.777rem;
+  --text-3xl: 2.369rem;
+  --text-4xl: 3.157rem;
+  --text-5xl: 4.209rem;
+  --text-6xl: 5.61rem;
+  --text-7xl: 7.478rem;
+  --text-8xl: 9.969rem;
+
+  /* Radius — see docs/design-system.md §3.1 */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Motion — see docs/design-system.md §4 */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasised: cubic-bezier(0.3, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-brand-paper);
+    color: var(--color-brand-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.55;
+  }
+
+  /* Heading defaults.
+   *
+   * Montserrat at 400 reads thin and unconvincing at any display size — the
+   * brand direction wants confident, modern headlines, so defaults sit at the
+   * heavy end of the scale.
+   *
+   *   h1 — display weight (800), tightest tracking
+   *   h2 — bold (700)
+   *   h3 — bold (700)
+   *
+   * Override per-element via Tailwind utilities (e.g. font-medium, font-black).
+   */
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--color-brand-ink);
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--color-brand-ink);
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--color-brand-ink);
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  ::selection {
+    background: var(--color-brand-primary);
+    color: #fff;
+  }
+
+  *:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(1 50 153 / 0.25);
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .tnum {
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
+  .shadow-soft {
+    box-shadow:
+      0 1px 2px rgb(20 30 60 / 0.04),
+      0 4px 12px rgb(20 30 60 / 0.06);
+  }
+
+  .shadow-lifted {
+    box-shadow:
+      0 4px 8px rgb(20 30 60 / 0.06),
+      0 24px 48px rgb(20 30 60 / 0.1);
+  }
+}
+
+/*
+ * Hero background animations.
+ * Two distinct keyframes so the orbs don't drift in sync.
+ * Honours prefers-reduced-motion via the @media block at the top of this file.
+ */
+@keyframes hero-orb-a {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate3d(28px, -22px, 0) scale(1.1);
+    opacity: 1;
+  }
+}
+
+@keyframes hero-orb-b {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translate3d(-26px, -28px, 0) scale(1.12);
+    opacity: 1;
+  }
+}
+
+.hero-orb-a {
+  animation: hero-orb-a 12s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.hero-orb-b {
+  animation: hero-orb-b 16s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.hero-orb-c {
+  animation: hero-orb-a 20s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/*
+ * Mapbox custom markers (see components/agents/AgentMap.tsx).
+ * Hover handled by Tailwind classes on the element; active state needs to
+ * apply via a real class (not inline style) so it doesn't flicker against
+ * the hover transform.
+ */
+.agent-pin--active {
+  transform: scale(1.3) !important;
+  z-index: 10;
+  box-shadow: 0 0 0 6px rgba(0, 185, 239, 0.25), 0 6px 16px rgba(1, 50, 153, 0.55) !important;
+}
