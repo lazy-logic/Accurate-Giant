@@ -10,10 +10,12 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { GameTile } from "@/components/games/GameTile";
 import { fetchFeaturedGames, fetchLatestDraw } from "@/lib/data";
+import { games as allGames } from "@/lib/games";
 
 export async function FeaturedGames() {
   const games = await fetchFeaturedGames();
   const latestDraws = await Promise.all(games.map((g) => fetchLatestDraw(g.slug)));
+  const totalGames = allGames.length;
 
   return (
     <section className="relative py-24 md:py-32 bg-brand-paper overflow-hidden">
@@ -42,7 +44,7 @@ export async function FeaturedGames() {
             href="/games"
             className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:gap-2.5 transition-all whitespace-nowrap"
           >
-            See all 15 games
+            See all {totalGames} games
             <ArrowRight size={16} strokeWidth={2} />
           </Link>
         </div>
@@ -57,7 +59,7 @@ export async function FeaturedGames() {
           href="/games"
           className="mt-8 md:hidden inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary"
         >
-          See all 15 games
+          See all {totalGames} games
           <ArrowRight size={16} strokeWidth={2} />
         </Link>
       </Container>

@@ -4,20 +4,22 @@
  * Used in three places: the Home results widget, the Results page hero strip,
  * and the per-game results detail.
  *
- * Redesigned 2026-04-30:
- *  - Coloured stripe across the top using the game's `ballColor` so each card
- *    has a quick brand identifier (no more meaningless plain-white corner ball).
- *  - Numbers are larger and centred — they're the focal point, give them air.
- *  - Footer line shows "Next draw in N days" computed from the game's
- *    schedule. Helps the visitor understand cadence at a glance.
- *  - The whole card is wrapped in a Link so visitors can deep-link to the
- *    per-game archive without an explicit "View archive" link.
+ * Refinements 2026-04-30 (later in the day):
+ *  - Smaller title (`text-xl md:text-2xl`) so multi-word names like
+ *    "Fortune Thursday" no longer wrap to two lines and force the card
+ *    taller than its siblings.
+ *  - `h-full` so the article fills its grid row regardless of content
+ *    length — siblings always end up the same height.
+ *  - Raw logo image (no white ball wrapper) sits in the top-right
+ *    corner. The 3D ball is too much next to the colour stripe and the
+ *    blue number balls below.
  *
  * The `layoutId` makes the card a shared-element transition target for
  * Framer Motion when navigating between Home, Results, and Game Detail.
  */
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { m } from "framer-motion";
 import { ArrowRight, CalendarClock } from "lucide-react";
@@ -54,7 +56,7 @@ export function LatestDrawCard({
       layoutId={`draw-${game.slug}`}
       transition={{ duration: 0.4, ease: [0.3, 0, 0, 1] }}
       className={cn(
-        "group relative flex flex-col rounded-2xl border border-brand-border bg-brand-paper overflow-hidden transition-all duration-200",
+        "group relative flex flex-col h-full rounded-2xl border border-brand-border bg-brand-paper overflow-hidden transition-all duration-200",
         linkToArchive && "hover:shadow-lifted hover:-translate-y-1 hover:border-brand-border-strong",
         className,
       )}
@@ -66,12 +68,25 @@ export function LatestDrawCard({
         style={{ background: stripeColor }}
       />
 
-      <div className="flex flex-col p-6 md:p-7">
-        <header>
+      <div className="flex flex-col flex-1 p-6 md:p-7">
+        {/* Logo — raw, top-right corner (no ball wrapper) */}
+        {game.logoUrl && (
+          <div className="absolute top-5 right-5 w-11 h-11 flex items-center justify-center pointer-events-none">
+            <Image
+              src={game.logoUrl}
+              alt=""
+              width={88}
+              height={88}
+              className="object-contain max-w-full max-h-full w-auto h-auto"
+            />
+          </div>
+        )}
+
+        <header className="pr-14">
           <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-ink-muted">
             {game.scheduleLabel}
           </p>
-          <h3 className="font-display font-extrabold text-2xl md:text-3xl mt-1.5 leading-tight tracking-[-0.02em] text-brand-ink">
+          <h3 className="font-display font-extrabold text-xl md:text-2xl mt-1.5 leading-tight tracking-[-0.02em] text-brand-ink">
             {game.name}
           </h3>
           <p className="text-xs text-brand-ink-muted mt-1.5 tnum">
@@ -79,7 +94,7 @@ export function LatestDrawCard({
           </p>
         </header>
 
-        {/* Numbers — larger, centred for focus */}
+        {/* Numbers — centred, given their own breathing room */}
         <div className="flex justify-center py-6 md:py-7">
           <NumberRow
             numbers={draw.numbers}
@@ -89,7 +104,7 @@ export function LatestDrawCard({
           />
         </div>
 
-        {/* Footer: next-draw indicator + arrow */}
+        {/* Footer pinned to the bottom */}
         <footer className="mt-auto pt-4 border-t border-brand-border flex items-center justify-between text-xs">
           {daysToNext !== null ? (
             <span className="inline-flex items-center gap-1.5 font-semibold text-brand-ink-muted">
@@ -115,7 +130,11 @@ export function LatestDrawCard({
 
   if (linkToArchive) {
     return (
-      <Link href={`/results/${game.slug}`} className="block" aria-label={`${game.name} results archive`}>
+      <Link
+        href={`/results/${game.slug}`}
+        className="block h-full"
+        aria-label={`${game.name} results archive`}
+      >
         {inner}
       </Link>
     );

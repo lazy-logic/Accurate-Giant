@@ -15,6 +15,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, MapPin, Phone, Store } from "lucide-react";
 import { Container } from "@/components/layout/Container";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { Badge } from "@/components/ui/Badge";
 import { TrustStrip } from "@/components/layout/TrustStrip";
 import { NumberRow } from "@/components/results/NumberRow";
@@ -68,27 +69,23 @@ export default async function GameDetailPage({
 
   return (
     <>
+      <PageHeader
+        eyebrow={game.scheduleLabel}
+        title={game.name}
+        subtitle={game.longDescription}
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Games", href: "/games" },
+          { label: game.name },
+        ]}
+      />
+
+      {/* Details strip — badges + CTA on left, ball on right */}
       <section className="border-b border-brand-border bg-brand-paper">
         <Container>
-          <nav aria-label="Breadcrumb" className="pt-6 text-sm text-brand-ink-muted">
-            <Link href="/games" className="hover:text-brand-primary">
-              Games
-            </Link>
-            <span className="mx-2">/</span>
-            <span className="text-brand-ink">{game.name}</span>
-          </nav>
-          <div className="py-12 md:py-16 grid gap-10 md:grid-cols-12">
+          <div className="py-12 md:py-16 grid gap-10 md:grid-cols-12 items-center">
             <div className="md:col-span-7">
-              <p className="text-xs font-semibold uppercase tracking-wider text-brand-primary">
-                {game.scheduleLabel}
-              </p>
-              <h1 className="text-6xl md:text-7xl mt-2">
-                {game.name}
-              </h1>
-              <p className="mt-5 text-lg text-brand-ink-muted leading-relaxed max-w-xl">
-                {game.longDescription}
-              </p>
-              <div className="mt-7 flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Badge variant="default">{game.scheduleLabel}</Badge>
                 <Badge variant="secondary">
                   <ChannelIcon size={12} strokeWidth={2} />
@@ -105,33 +102,32 @@ export default async function GameDetailPage({
                 {isPosOnly ? (
                   <Link
                     href="/how-to-play"
-                    className="inline-flex items-center gap-2 h-12 px-7 rounded-md bg-brand-primary text-white text-base font-medium hover:bg-[#01277a] shadow-soft transition-all"
+                    className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
                   >
                     How to play via POS
-                    <ArrowRight size={18} strokeWidth={1.75} />
+                    <ArrowRight size={18} strokeWidth={2} />
                   </Link>
                 ) : isUssdOnly ? (
                   <Link
                     href="/how-to-play"
-                    className="inline-flex items-center gap-2 h-12 px-7 rounded-md bg-brand-primary text-white text-base font-medium hover:bg-[#01277a] shadow-soft transition-all"
+                    className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
                   >
                     How to play via USSD ({game.channelDetail})
-                    <ArrowRight size={18} strokeWidth={1.75} />
+                    <ArrowRight size={18} strokeWidth={2} />
                   </Link>
                 ) : (
                   <Link
                     href={`/agents?game=${game.slug}`}
-                    className="inline-flex items-center gap-2 h-12 px-7 rounded-md bg-brand-primary text-white text-base font-medium hover:bg-[#01277a] shadow-soft transition-all"
+                    className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
                   >
-                    <MapPin size={18} strokeWidth={1.75} />
+                    <MapPin size={18} strokeWidth={2} />
                     Find an agent
                   </Link>
                 )}
               </div>
             </div>
             <div className="md:col-span-5">
-              <div className="relative aspect-square flex items-center justify-center">
-                {/* Halo behind the ball */}
+              <div className="relative aspect-square flex items-center justify-center max-w-sm mx-auto">
                 <div
                   aria-hidden
                   className="absolute inset-[8%] rounded-full bg-gradient-to-br from-brand-secondary/30 via-brand-primary/15 to-transparent blur-3xl"

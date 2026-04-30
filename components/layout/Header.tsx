@@ -37,8 +37,8 @@ const NAV = [
   { label: "Games", href: "/games" },
   { label: "Results", href: "/results" },
   { label: "How to play", href: "/how-to-play" },
-  { label: "Agents", href: "/agents" },
   { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
 ];
 
 const isActive = (pathname: string | null, href: string) => {
@@ -70,8 +70,8 @@ export function Header() {
             "mx-auto max-w-[1240px] rounded-3xl border border-white/60 transition-all duration-300",
             "bg-white/70 backdrop-blur-2xl backdrop-saturate-150",
             scrolled
-              ? "shadow-[0_10px_32px_rgba(1,30,80,0.12),0_2px_4px_rgba(0,185,239,0.08)] py-3 md:py-3.5"
-              : "shadow-[0_8px_28px_rgba(1,30,80,0.08),0_1px_2px_rgba(0,185,239,0.06)] py-4 md:py-5",
+              ? "shadow-[0_10px_32px_rgba(1,30,80,0.12),0_2px_4px_rgba(0,185,239,0.08)] py-2 md:py-2.5"
+              : "shadow-[0_8px_28px_rgba(1,30,80,0.08),0_1px_2px_rgba(0,185,239,0.06)] py-2.5 md:py-3",
           )}
         >
           <div className="flex items-center justify-between gap-6 px-5 md:px-6">
@@ -89,15 +89,16 @@ export function Header() {
                 priority
                 className={cn(
                   "w-auto transition-all duration-300",
-                  scrolled ? "h-10 md:h-12" : "h-12 md:h-14",
+                  scrolled ? "h-8 md:h-9" : "h-9 md:h-11",
                 )}
               />
             </Link>
 
-            {/* Desktop nav with animated active pill */}
+            {/* Desktop nav with sliding-underline active indicator
+                (was a filled pill background — too button-like).            */}
             <nav
               aria-label="Primary"
-              className="hidden md:flex items-center gap-0.5"
+              className="hidden md:flex items-center gap-1"
             >
               {NAV.map((item) => {
                 const active = isActive(pathname, item.href);
@@ -106,39 +107,33 @@ export function Header() {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      "relative px-3.5 lg:px-4 py-2.5 rounded-full text-sm font-semibold transition-colors duration-200 group",
+                      "relative px-3 lg:px-4 py-2.5 text-sm font-semibold transition-colors duration-200 group",
                       active
-                        ? "text-white"
+                        ? "text-brand-primary"
                         : "text-brand-ink hover:text-brand-primary",
                     )}
                   >
+                    <span className="relative z-10">{item.label}</span>
+                    {/* Active dot indicator only (was underline + dot).
+                        The same Framer Motion layoutId on every active item
+                        makes the dot glide between items as the route changes. */}
                     {active && (
                       <m.span
-                        layoutId="nav-active-pill"
-                        className="absolute inset-0 rounded-full"
-                        style={{
-                          background:
-                            "linear-gradient(135deg, #013299 0%, #001f5f 100%)",
-                          boxShadow: [
-                            "inset 0 1px 0 rgba(255,255,255,0.18)",
-                            "0 4px 14px rgba(1,50,153,0.35)",
-                            "0 0 0 1px rgba(0,185,239,0.15)",
-                          ].join(", "),
-                        }}
+                        layoutId="nav-active-indicator"
+                        className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-1.5 h-1.5 rounded-full bg-brand-primary"
                         transition={{
                           type: "spring",
-                          stiffness: 380,
-                          damping: 32,
+                          stiffness: 420,
+                          damping: 34,
                           mass: 0.7,
                         }}
                       />
                     )}
-                    <span className="relative z-10">{item.label}</span>
-                    {/* Hover underline indicator (inactive items only) */}
+                    {/* Hover dot (inactive only) — soft preview */}
                     {!active && (
                       <span
                         aria-hidden
-                        className="absolute left-1/2 -translate-x-1/2 bottom-1 h-0.5 w-0 bg-brand-primary rounded-full transition-all duration-200 group-hover:w-5"
+                        className="absolute left-1/2 -translate-x-1/2 -bottom-1 w-1.5 h-1.5 rounded-full bg-brand-primary/0 group-hover:bg-brand-primary/40 transition-colors duration-200"
                       />
                     )}
                   </Link>
@@ -146,15 +141,15 @@ export function Header() {
               })}
             </nav>
 
-            {/* Desktop CTA — primary action button */}
+            {/* Desktop CTA — bigger, more prominent */}
             <Link
               href="/how-to-play"
-              className="hidden lg:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-brand-primary text-white text-xs font-semibold hover:bg-[#01277a] transition-all shadow-soft group"
+              className="hidden lg:inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-primary text-white text-sm font-bold hover:bg-[#01277a] transition-all shadow-soft hover:shadow-lifted group"
             >
               Get started
               <ArrowRight
-                size={13}
-                strokeWidth={2.25}
+                size={16}
+                strokeWidth={2.5}
                 className="transition-transform group-hover:translate-x-0.5"
               />
             </Link>

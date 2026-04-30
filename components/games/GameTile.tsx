@@ -21,9 +21,7 @@ import { ArrowRight, Phone, Store, MapPin } from "lucide-react";
 import type { Game } from "@/lib/games";
 import type { Draw } from "@/lib/results";
 import { Badge } from "@/components/ui/Badge";
-import { NumberRow } from "@/components/results/NumberRow";
 import { GameLogo } from "./GameLogo";
-import { formatShortDate } from "@/lib/utils";
 
 const channelMeta = {
   standard: { label: "Standard", icon: MapPin },
@@ -33,17 +31,18 @@ const channelMeta = {
 
 type GameTileProps = {
   game: Game;
+  /** Reserved for future use; ignored after the latest-result strip was removed. */
   latestDraw?: Draw;
 };
 
-export function GameTile({ game, latestDraw }: GameTileProps) {
+export function GameTile({ game }: GameTileProps) {
   const channel = channelMeta[game.channel];
   const ChannelIcon = channel.icon;
 
   return (
     <Link
       href={`/games/${game.slug}`}
-      className="group relative flex flex-col items-center text-center pt-20 px-6 pb-7 rounded-3xl border border-brand-border bg-brand-paper transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lifted hover:border-brand-border-strong"
+      className="group relative flex flex-col items-center text-center pt-20 px-6 pb-7 h-full rounded-3xl border border-brand-border bg-brand-paper transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lifted hover:border-brand-border-strong"
     >
       {/* Year ribbon */}
       {game.introducedYear && (
@@ -82,24 +81,8 @@ export function GameTile({ game, latestDraw }: GameTileProps) {
         </Badge>
       </div>
 
-      {/* Latest result strip */}
-      <div className="w-full mt-5 pt-5 border-t border-brand-border">
-        {latestDraw ? (
-          <>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-ink-muted mb-2 tnum">
-              Latest · {formatShortDate(latestDraw.drawDate)} · #{latestDraw.drawNumber}
-            </p>
-            <div className="flex justify-center">
-              <NumberRow numbers={latestDraw.numbers} size="sm" animated={false} />
-            </div>
-          </>
-        ) : (
-          <p className="text-xs text-brand-ink-muted">No published results yet.</p>
-        )}
-      </div>
-
-      {/* CTA */}
-      <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary group-hover:gap-2.5 transition-all">
+      {/* CTA — pinned to the bottom; latest-result strip removed */}
+      <span className="mt-auto pt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary group-hover:gap-2.5 transition-all">
         View game
         <ArrowRight size={16} strokeWidth={2} />
       </span>

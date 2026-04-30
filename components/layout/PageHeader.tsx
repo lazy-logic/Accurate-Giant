@@ -64,12 +64,12 @@ export function PageHeader({
       />
 
       <Container>
-        {/* Inner padding halved from py-16/24 to py-8/12 */}
-        <div className="relative py-8 md:py-12">
+        {/* Centred content. */}
+        <div className="relative py-12 md:py-16 lg:py-20 flex flex-col items-center text-center">
           {breadcrumbs && breadcrumbs.length > 0 && (
             <nav
               aria-label="Breadcrumb"
-              className="mb-3 flex flex-wrap items-center gap-1.5 text-xs font-semibold text-white/70"
+              className="mb-3 flex flex-wrap items-center justify-center gap-1.5 text-xs font-semibold text-white/70"
             >
               {breadcrumbs.map((c, i) => {
                 const last = i === breadcrumbs.length - 1;

@@ -63,7 +63,9 @@ export default async function GamesPage({
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-brand-ink-muted mb-6 tnum">
                 Showing {filtered.length} of {allGames.length} games
               </p>
-              <div className="grid gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {/* gap-y is generous so the negative-top ball "trophy" on each
+                  tile clears the row above (~48px overhang). */}
+              <div className="grid gap-x-5 md:gap-x-6 gap-y-16 md:gap-y-20 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filtered.map((g, i) => (
                   <GameTile key={g.slug} game={g} latestDraw={latestDraws[i]} />
                 ))}

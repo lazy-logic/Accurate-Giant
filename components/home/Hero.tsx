@@ -29,7 +29,11 @@ const SCREENSHOTS = {
   gameDetail: "/app-screenshot/app-game-detail.jpg",
 };
 
-const ROTATING_WORDS = ["good.", "Ghana.", "purpose.", "community.", "everyone."];
+const ROTATING_WORDS = [
+  "Real wins.",
+  "Real chances.",
+  "Instant payout.",
+];
 
 export function Hero() {
   return (
@@ -151,8 +155,13 @@ export function Hero() {
       </div>
 
       <Container>
-        {/* relative + z-10 puts the content above the decorative layers */}
-        <div className="relative z-10 py-16 md:py-24 lg:py-28 grid gap-14 lg:gap-10 lg:grid-cols-12 items-center">
+        {/* relative + z-10 puts the content above the decorative layers.
+            Top padding cut down so the headline lands close to the navbar
+            instead of floating in empty space. items-start on lg keeps the
+            left copy column anchored to the top — without it, the centre
+            alignment pushes the copy down to vertically match the taller
+            phone cascade and reopens the gap. */}
+        <div className="relative z-10 pt-14 md:pt-20 lg:pt-24 pb-16 md:pb-24 lg:pb-28 grid gap-14 lg:gap-10 lg:grid-cols-12 items-center lg:items-start">
           {/* ───── Copy column ───── */}
           <div className="lg:col-span-7">
             {/* Eyebrow now carries the channel callout (was the NLA badge) */}
@@ -169,7 +178,7 @@ export function Hero() {
             </div>
 
             <h1 className="text-5xl md:text-6xl xl:text-7xl text-brand-ink text-balance">
-              <span className="block">Lotto played for</span>
+              <span className="block">Real games.</span>
               <TypewriterRotate
                 words={ROTATING_WORDS}
                 className="text-brand-primary"
@@ -177,8 +186,8 @@ export function Hero() {
             </h1>
 
             <p className="mt-6 text-base md:text-lg text-brand-ink-muted leading-relaxed max-w-xl text-balance">
-              11 NLA-licensed draws. Three ways to play. Every cedi audited
-              and given back to the community.
+              Eleven NLA-licensed draws. Audited every year. Proceeds
+              directed to schools, clinics, and community work across Ghana.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">

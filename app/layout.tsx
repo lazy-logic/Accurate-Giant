@@ -12,11 +12,12 @@
  * The flex column on <body> + flex-1 on <main> is what pins the footer to the
  * bottom of short pages.
  */
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageTransitions } from "@/components/layout/PageTransitions";
+import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import "./globals.css";
 
 const inter = Inter({
@@ -36,12 +37,26 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: {
-    default: "Accurate Giant — Ghana's charity-led lotto",
+    default: "Accurate Giant Company Ltd. — NLA-licensed lotto in Ghana",
     template: "%s · Accurate Giant",
   },
   description:
-    "A Ghanaian charity, licensed by the National Lottery Authority to operate lotto in Accra. View results, find an agent, and learn how giving works.",
+    "NLA-registered private lotto operator in Ghana. Eleven licensed draws across the week. Results, games, and our agent network. Operating under the National Lotto Act 2006 (Act 722).",
   metadataBase: new URL("https://accurategiant.example"),
+  openGraph: {
+    type: "website",
+    locale: "en_GH",
+    siteName: "Accurate Giant Company Ltd.",
+  },
+  robots: { index: true, follow: true },
+};
+
+// Viewport for proper mobile scaling across the responsive layouts.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: "#013299",
 };
 
 export default function RootLayout({
@@ -57,6 +72,7 @@ export default function RootLayout({
           <PageTransitions>{children}</PageTransitions>
         </main>
         <Footer />
+        <ScrollToTop />
       </body>
     </html>
   );

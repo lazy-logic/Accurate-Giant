@@ -26,6 +26,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Container } from "@/components/layout/Container";
+import { games } from "@/lib/games";
 
 type Step = {
   number: string;
@@ -48,14 +49,14 @@ const STEPS: Step[] = [
     numberShadow: "2",
     icon: Smartphone,
     title: "Play your way",
-    body: "Use the AG mobile app, dial *987# from any phone, or visit an approved agent in Accra.",
+    body: "Use the AG mobile app, dial *987# from any phone, or visit an approved agent.",
   },
   {
     number: "03",
     numberShadow: "3",
     icon: Sparkles,
     title: "Watch for the draw",
-    body: "Results stream here within minutes of the official NLA draw. One click to your full archive.",
+    body: "Results stream here within minutes of the official NLA draw.",
   },
 ];
 
@@ -69,19 +70,9 @@ export function HowItWorks() {
       />
 
       <Container>
-        <header className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-primary mb-4">
-            How it works
-          </p>
-          <h2 className="text-4xl md:text-5xl xl:text-6xl text-balance">
-            Three steps from start to draw.
-          </h2>
-          <p className="mt-5 text-base md:text-lg text-brand-ink-muted text-balance">
-            No accounts, no checkouts, just the mechanics. Same NLA-licensed
-            games whichever channel you pick.
-          </p>
-        </header>
-
+        {/* No header here — the PageHeader on /how-to-play already carries
+            the eyebrow + title + subtitle for this section. Adding another
+            header would duplicate the message. */}
         <div className="relative grid gap-12 md:gap-8 lg:gap-12 md:grid-cols-3">
           {/* Dashed connector line — runs horizontally through the icon row */}
           <div
@@ -136,7 +127,7 @@ export function HowItWorks() {
             href="/games"
             className="group inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] transition-all shadow-soft"
           >
-            Browse all 15 games
+            Browse all {games.length} games
             <ArrowRight
               size={18}
               strokeWidth={2}

@@ -1,8 +1,6 @@
 # Accurate Giant Company Ltd. — website
 
-A modern, charity-led marketing and information site for an NLA-licensed Ghanaian lotto operator. Built per the spec in [AccurateGiant_SuperPrompt.md](AccurateGiant_SuperPrompt.md).
-
-> **Status:** §8 step 4 of the super-prompt deliverables. The six wireframed pages (Home, Games, Game Detail, Results, About, Responsible Play) are implemented in high-fidelity. Other routes (How to play, Agents, News, Contact, Legal/\*) are stubbed with a shared `StubPage` component so navigation never 404s. Supabase (step 6) and the results pipeline (step 7) come next.
+Marketing and information site for an NLA-registered private lotto operator in Ghana. Built per the spec in [AccurateGiant_SuperPrompt.md](AccurateGiant_SuperPrompt.md).
 
 ---
 
@@ -13,120 +11,176 @@ npm install
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
-> **First time after `git clone`?** Until you run `npm install`, your IDE will show "Cannot find module 'next/link'" and "JSX element implicitly has type 'any'" errors throughout the codebase. That's expected — the source assumes its dependencies are installed. Run install once and the diagnostics clear.
+> First time after `git clone`? Run `npm install` once. Until you do, your IDE will flag "Cannot find module 'next/link'" everywhere — it's just unresolved imports.
 
 ## Scripts
 
 | Command | What it does |
 |---------|--------------|
-| `npm run dev` | Local dev server with hot reload (http://localhost:3000) |
+| `npm run dev` | Local dev server (http://localhost:3000) |
 | `npm run build` | Production build |
 | `npm run start` | Run the production build locally |
-| `npm run lint` | ESLint (Next.js default config — to be tuned) |
+| `npm run lint` | ESLint |
 | `npm run typecheck` | `tsc --noEmit` — should run clean before any PR |
 
 ## Stack
 
-Per super-prompt §5:
-
 - **Framework:** Next.js 15 (App Router) + React 19 + TypeScript (strict)
-- **Styling:** Tailwind CSS v4 with `--brand-*` custom properties (CSS-first config — see [app/globals.css](app/globals.css))
-- **Animation:** Framer Motion (GSAP arrives later for the GSAP-specific digit reveal — see [components/results/NumberChip.tsx](components/results/NumberChip.tsx))
+- **Styling:** Tailwind CSS v4 with `--brand-*` custom properties (CSS-first config in [app/globals.css](app/globals.css))
+- **Animation:** Framer Motion (`layoutId` for nav + card morph transitions)
 - **Icons:** Lucide React
-- **Fonts:** `next/font/google` — Fraunces (display) + Inter (body)
-- **Images:** `next/image` with AVIF/WebP
-
-Not yet wired (deferred to later super-prompt steps):
-
-- shadcn/ui (currently using lightweight in-house primitives in `components/ui/`)
-- Supabase (mock data in `lib/games.ts` and `lib/results.ts`)
-- React Hook Form + Zod (forms come with the contact route build-out)
-- Playwright + axe-core (CI gate before launch)
-- next-intl (English-first; structure left intact for later French / local-language)
+- **Fonts:** `next/font/google` — Montserrat (display) + Inter (body), see [ADR 0009](docs/decisions/0009-montserrat-inter-type-pair.md)
+- **Map:** Mapbox GL JS for the agents locator
+- **Data:** Supabase (with in-memory mock fallback)
 
 ## Project layout
 
 ```
-ACCURATE_GAINT/
-├── app/                       # Next.js App Router
-│   ├── layout.tsx             # Root layout — fonts, Header, Footer
-│   ├── globals.css            # Tailwind v4 + design tokens
-│   ├── page.tsx               # Home (composed from components/home/*)
-│   ├── games/
-│   ├── results/
-│   ├── about/
-│   ├── responsible-play/
-│   ├── how-to-play/           # Stub
-│   ├── agents/                # Stub
-│   ├── news/                  # Stub
-│   ├── contact/               # Stub
-│   ├── legal/{terms,privacy,license,cookies}/  # Stubs
-│   └── not-found.tsx
-├── components/
-│   ├── layout/                # Header, Footer, Container, TrustStrip, StubPage
-│   ├── ui/                    # Button, Badge (in-house primitives)
-│   ├── games/                 # GameTile
-│   ├── results/               # NumberChip, NumberRow, LatestDrawCard
-│   └── home/                  # Hero, MissionStrip, ResultsWidget, FeaturedGames, …
-├── lib/
-│   ├── utils.ts               # cn(), date formatters
-│   ├── games.ts               # 15-game seed catalogue
-│   └── results.ts             # Mock winning numbers
-├── public/
-│   ├── brand/ag-logo.png      # Supplied logo (PNG only — no SVG, per owner)
-│   └── inspiration/           # Discovery-phase reference research
-└── docs/                      # Discovery + design deliverables
-    ├── design-brief.md
-    ├── content-inventory.md
-    ├── nla-compliance.md
-    ├── brand-tokens.md
-    ├── design-system.md
-    └── wireframes.md
+app/                            # Next.js App Router
+├── layout.tsx                  # Fonts, Header, Footer, ScrollToTop
+├── globals.css                 # Tailwind v4 + design tokens
+├── page.tsx                    # Home
+├── games/                      # Catalogue + per-game detail
+├── results/                    # Results page + per-game archive
+├── agents/                     # Mapbox locator
+├── how-to-play/
+├── about/                      # Minimal — mission + license card + CTA
+├── contact/                    # Form + office details
+├── responsible-play/
+├── legal/{terms,privacy,license,cookies}/
+├── admin/                      # Sidebar shell behind Supabase auth
+└── api/admin/{login,logout}    # Auth route handlers
+components/
+├── layout/                     # Header, Footer, PageHeader, Container, …
+├── agents/                     # AgentMap, AgentLocator
+├── games/                      # GameTile, GameLogo (3D ball)
+├── home/                       # Hero, WeekSchedule, ResultsWidget, …
+├── marketing/                  # PhoneFrame, TypewriterRotate, HowItWorks
+├── results/                    # NumberChip, NumberRow, LatestDrawCard
+└── ui/                         # Button, Badge
+lib/
+├── data.ts                     # Async fetchers (Supabase or mock fallback)
+├── games.ts                    # Game catalogue (11 games)
+├── results.ts                  # Mock winning numbers w/ DOW math
+├── agents.ts                   # Mock Accra agent locations
+├── regulatory.ts               # NLA register URL + licence-number constant
+├── supabase.ts / supabase-server.ts  # Supabase clients (anon + SSR)
+└── utils.ts                    # cn(), date helpers, daysUntilNextDraw()
+supabase/
+├── migrations/                 # 0001 schema, 0002 RLS
+└── seed.sql                    # Idempotent seed (DOW-based draw dates)
+docs/                           # Discovery + design + ADRs
+public/games/                   # 11 game logos + 1 ball-cradle decorative asset
+public/brand/                   # AG logo
+public/app-screenshot/          # Mobile-app screenshots used in marketing
 ```
 
 ## How to read the codebase
 
-Every file has a header comment describing its role. Specifically:
+Every file has a header comment. Key conventions:
 
-- **Design tokens.** Single source of truth is the `@theme` block in [app/globals.css](app/globals.css). Never hardcode hex values, font families, or radius pixels — always reference a `--color-brand-*`, `--font-*`, or `--radius-*` token. If you need a new one, add it there first.
-- **The `cn()` helper** in [lib/utils.ts](lib/utils.ts) is how every component composes Tailwind classes. It de-duplicates conflicting utilities (e.g. `px-2 px-4` → `px-4`).
-- **Game data** flows from [lib/games.ts](lib/games.ts). The `featured: true` flag drives the Home page Featured Games strip — flip it on/off there, not in the component.
-- **Results data** flows from [lib/results.ts](lib/results.ts). When Supabase is wired, the helper signatures stay the same so call-sites don't change.
-- **Disclosures.** The footer renders MANDATORY regulatory disclosures on every page (NLA license, 18+, Responsible play, charity-status). Don't remove them — see [docs/nla-compliance.md](docs/nla-compliance.md).
+- **Design tokens** are the `@theme` block in [app/globals.css](app/globals.css). Components reference `bg-brand-primary`, `font-display`, etc. — never hardcode hex/font/radius values.
+- **`cn()`** in [lib/utils.ts](lib/utils.ts) merges Tailwind classes. `clsx` + `tailwind-merge`.
+- **Game data** flows from [lib/games.ts](lib/games.ts). Each game has a `ballColor` (hex) for the per-card top stripe in `LatestDrawCard`.
+- **Results data** flows from [lib/results.ts](lib/results.ts). Mock dates use day-of-week math so each game's most-recent draw lands on its scheduled weekday.
+- **Async fetchers** in [lib/data.ts](lib/data.ts) auto-detect Supabase via env vars and fall back to mocks. Helper signatures match across both modes — no call-site changes when toggling.
+- **Compliance disclosures** (NLA-registered badge, 18+, Responsible play link) render in the global `Footer` via `lib/regulatory.ts` constants. The badge links to the public NLA register; once you supply `NLA_LICENCE_NUMBER`, every badge swaps to the formal number automatically.
 
-## Outstanding owner-supplied content
+## Environment variables
 
-Marked as `[OWNER]` or `[TBC]` in the codebase. Tracked in [docs/content-inventory.md §4](docs/content-inventory.md):
+Copy `.env.example` to `.env.local` and fill in:
 
-1. NLA license number (renders in footer + about page)
-2. Audited annual giving figure (renders in homepage callout + about page)
-3. Leadership names + photos + bios (about page)
-4. Approved Accra agent list (agent locator page)
-5. Per-game ticket prices, exact draw times, prize structures (NLA-sourced)
-6. Self-exclusion mechanism (responsible-play page)
-7. Ghana-specific support helplines (responsible-play page)
-8. Real winners' photography (homepage stories strip)
-9. Office address + phone numbers (footer + about + contact)
-10. Privacy / Terms / License / Cookies copy (legal review)
+| Variable | Where it's used | Notes |
+|----------|-----------------|-------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Public + admin reads/writes | `https://<ref>.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public reads (RLS-bound) | `eyJ...` JWT or new `sb_publishable_...` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only writes (results pipeline, admin actions) | Bypasses RLS — never expose to the browser |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | Agents map | Public token (`pk.`); restrict to your domains in the Mapbox dashboard |
 
-## Compliance gate (must pass before launch)
+The site falls back to in-memory mocks if Supabase env vars are missing — `/admin` auth gate also softens out, so the rest of the site stays browseable.
 
-See [docs/nla-compliance.md §9](docs/nla-compliance.md) for the full pre-launch checklist. Short version:
+---
 
-- ✅ License number, 18+ badge, and Responsible play link are in the global footer
+## Deploy to Vercel
+
+### 1. Push to a Git remote
+
+The repo is initialised with a `main` branch. Create a remote and push:
+
+```bash
+gh repo create accurate-giant --private --source=. --push
+# or
+git remote add origin <your-repo-url>
+git push -u origin main
+```
+
+### 2. Import into Vercel
+
+- [vercel.com/new](https://vercel.com/new) → Import the repo
+- Framework preset: **Next.js** (auto-detected)
+- Build Command: `npm run build` (default)
+- Output: `.next` (default)
+- Install Command: `npm install` (default)
+- Root Directory: `./` (default)
+
+### 3. Set environment variables in Vercel
+
+Project Settings → Environment Variables. Add the four from the table above for **Production, Preview, Development**.
+
+| Variable | Visibility |
+|----------|-----------|
+| `NEXT_PUBLIC_SUPABASE_URL` | All envs |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | All envs |
+| `SUPABASE_SERVICE_ROLE_KEY` | All envs (server-only — Vercel keeps `NEXT_PUBLIC_*` separate) |
+| `NEXT_PUBLIC_MAPBOX_TOKEN` | All envs |
+
+### 4. Restrict the Mapbox token
+
+Before going live, lock the token down in [account.mapbox.com/access-tokens](https://account.mapbox.com/access-tokens):
+
+- Add URL restrictions for your Vercel preview + production domains
+- Restrict scopes to `styles:read`, `fonts:read`, `tilesets:read`
+
+Otherwise anyone who views the site can scrape the token and bill it against your account.
+
+### 5. Wire Supabase to Vercel
+
+If you haven't already applied the schema:
+
+```bash
+supabase link --project-ref <ref>
+supabase db push                # applies supabase/migrations/0001 + 0002
+psql "<connection string>" -f supabase/seed.sql   # optional dev data
+```
+
+### 6. Deploy
+
+Push to `main` → Vercel auto-builds and deploys. PR branches get preview URLs.
+
+---
+
+## Outstanding owner-supplied items
+
+Marked as `[OWNER]` / `[TBC]` in the codebase. Tracked in [docs/content-inventory.md §4](docs/content-inventory.md):
+
+1. Formal NLA licence number — populates `NLA_LICENCE_NUMBER` in `lib/regulatory.ts`; every badge auto-updates
+2. Real Accra agent list — replaces `lib/agents.ts` mock
+3. Per-game ticket prices, exact draw times, prize structures (NLA-sourced)
+4. Self-exclusion mechanism — confirm in-house vs. NLA referral
+5. Ghana-specific support helplines (responsible-play page)
+6. Real winners' stories + photography (homepage strip)
+7. Final office phone number
+8. Privacy / Terms / License / Cookies — counsel review of the drafts in `app/legal/*`
+
+## Pre-launch compliance gate
+
+See [docs/nla-compliance.md §9](docs/nla-compliance.md) for the full checklist. Short version:
+
+- ✅ NLA-registered badge + 18+ badge + Responsible play link in the global footer
 - ✅ `/responsible-play` exists and is keyboard / screen-reader accessible
-- ⏳ NLA logo permission documented (the logo MUST NOT appear until then)
-- ⏳ Results-data permission + refresh cadence documented
+- ✅ NLA register linked from footer / TrustStrip / About / License pages
+- ⏳ NLA logo permission (must not appear until permission documented)
+- ⏳ Results-data permission + refresh cadence
 - ⏳ Privacy / Terms / License / Cookies reviewed by counsel
-
-## Where things go next
-
-Per the super prompt's deliverable order ([§8](AccurateGiant_SuperPrompt.md)):
-
-- **Step 6 — Supabase schema + admin.** Migrate `games`, `draws`, `winning_numbers`, `agents`, `posts`, plus the Supabase-Auth-gated `/admin` route.
-- **Step 7 — Results pipeline.** Manual ingest first, scheduled poll later. Critical: per [docs/nla-compliance.md §5](docs/nla-compliance.md), do NOT scrape `nla.com.gh` per-request — mirror with permission and a documented refresh cadence.
-- **Step 8 — Content load.** Replace every `[OWNER]` and `[TBC]` placeholder with real copy.
-- **Step 9 — Pre-launch compliance pass.** Walk the checklist with the owner and counsel.
-- **Step 10 — Launch on Vercel + Supabase**, plus an admin runbook in `docs/`.

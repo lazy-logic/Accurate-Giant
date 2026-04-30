@@ -54,48 +54,62 @@ export function DownloadAppCta() {
               fits the day.
             </p>
 
-            <div className="mt-10 grid sm:grid-cols-3 gap-3">
+            {/* Cards: horizontal layout on mobile (icon-left + content-right
+                so each card is half the height), vertical on sm+. */}
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
               {/* Channel: Mobile app */}
               <Link
                 href="#download-android"
-                className="group rounded-2xl border border-white/15 bg-white/5 p-5 hover:bg-white/10 hover:border-white/25 transition-all"
+                className="group rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-4 sm:flex-col sm:items-start sm:gap-0"
               >
-                <Smartphone size={22} strokeWidth={1.75} className="text-brand-secondary mb-3" />
-                <p className="font-bold text-base text-white">Mobile app</p>
-                <p className="text-xs text-white/60 mt-1">Android &amp; iOS</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
-                  Download
-                  <ArrowRight size={12} strokeWidth={2} />
+                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-3">
+                  <Smartphone size={22} strokeWidth={1.75} />
+                </span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-base text-white">Mobile app</span>
+                  <span className="block text-xs text-white/60 mt-0.5 sm:mt-1">Android &amp; iOS</span>
+                  <span className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
+                    Download
+                    <ArrowRight size={12} strokeWidth={2} />
+                  </span>
                 </span>
               </Link>
 
               {/* Channel: USSD */}
               <Link
                 href="/how-to-play"
-                className="group rounded-2xl border border-white/15 bg-white/5 p-5 hover:bg-white/10 hover:border-white/25 transition-all"
+                className="group rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-4 sm:flex-col sm:items-start sm:gap-0"
               >
-                <Phone size={22} strokeWidth={1.75} className="text-brand-secondary mb-3" />
-                <p className="font-bold text-base text-white">USSD</p>
-                <p className="text-xs text-white/60 mt-1 tnum">
-                  Dial *987# or *446#
-                </p>
-                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
-                  How it works
-                  <ArrowRight size={12} strokeWidth={2} />
+                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-3">
+                  <Phone size={22} strokeWidth={1.75} />
+                </span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-base text-white">USSD</span>
+                  <span className="block text-xs text-white/60 mt-0.5 sm:mt-1 tnum">
+                    Dial *987# or *446#
+                  </span>
+                  <span className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
+                    How it works
+                    <ArrowRight size={12} strokeWidth={2} />
+                  </span>
                 </span>
               </Link>
 
               {/* Channel: Agent */}
               <Link
                 href="/agents"
-                className="group rounded-2xl border border-white/15 bg-white/5 p-5 hover:bg-white/10 hover:border-white/25 transition-all"
+                className="group rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-4 sm:flex-col sm:items-start sm:gap-0"
               >
-                <MapPin size={22} strokeWidth={1.75} className="text-brand-secondary mb-3" />
-                <p className="font-bold text-base text-white">In person</p>
-                <p className="text-xs text-white/60 mt-1">Agents in Accra</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
-                  Find one
-                  <ArrowRight size={12} strokeWidth={2} />
+                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-3">
+                  <MapPin size={22} strokeWidth={1.75} />
+                </span>
+                <span className="flex-1 min-w-0">
+                  <span className="block font-bold text-base text-white">In person</span>
+                  <span className="block text-xs text-white/60 mt-0.5 sm:mt-1">Approved agents</span>
+                  <span className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
+                    Find one
+                    <ArrowRight size={12} strokeWidth={2} />
+                  </span>
                 </span>
               </Link>
             </div>

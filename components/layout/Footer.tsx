@@ -44,8 +44,9 @@ export function Footer() {
      */
     <footer className="bg-brand-primary text-white">
       <Container>
-        <div className="py-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-sm">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {/* Mobile: stacked + centered. Desktop: split row, justified to the edges. */}
+        <div className="py-5 flex flex-col items-center gap-3 text-sm md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-x-6 md:gap-y-3">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 md:justify-start">
             <Link
               href={NLA_REGISTER_URL}
               target="_blank"
@@ -70,7 +71,7 @@ export function Footer() {
               </Link>
             ))}
           </div>
-          <p className="text-white/85">
+          <p className="text-white/85 text-center md:text-right">
             © {new Date().getFullYear()} Accurate Giant Company Ltd.
             <span className="hidden sm:inline"> · NLA-licensed · Act 722</span>
           </p>

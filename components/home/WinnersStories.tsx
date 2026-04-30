@@ -11,25 +11,25 @@ import { Container } from "@/components/layout/Container";
 
 const STORIES = [
   {
-    name: "Akosua M.",
-    location: "Adabraka, Accra",
-    game: "Friday Bonanza",
-    quote:
-      "I'd been playing for a year. When I won, the first thing I did was finish the school fees for my two children.",
-  },
-  {
-    name: "Kwame O.",
-    location: "Osu, Accra",
+    name: "Selasi A.",
+    location: "Tema",
     game: "Sunday Aseda",
     quote:
-      "Aseda means thanksgiving. That's exactly how it felt. A quiet thank you, not a noise.",
+      "I won on an Aseda Sunday. The name itself felt like a sign. First thing was the kids' school fees. Second was a sigh of relief that lasted a week.",
   },
   {
-    name: "Ama A.",
-    location: "Madina, Accra",
-    game: "National Week Lotto",
+    name: "Kojo M.",
+    location: "Achimota",
+    game: "Mid Week",
     quote:
-      "I bought my ticket from the same agent for ten years. He was almost happier than I was.",
+      "Same five numbers for six years. Six. The Wednesday they came up I sat on the bus all the way home staring at the ticket like it would change its mind.",
+  },
+  {
+    name: "Mawunyo D.",
+    location: "Osu",
+    game: "Friday Bonanza",
+    quote:
+      "The agent saw the ticket before I did. He told me to sit down before he checked it. Best thirty seconds of my life — then a week of phone calls from family I hadn't heard from in years.",
   },
 ];
 

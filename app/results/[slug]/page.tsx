@@ -3,14 +3,16 @@
  * hero strip cards on /results, the recent-results section on /games/[slug],
  * and the home page's results widget.
  *
+ * Uses the shared PageHeader (brand-primary navy band) with breadcrumbs so
+ * inner pages have visual consistency with /results, /games, /about, etc.
+ *
  * The LatestDrawCard's layoutId ensures Framer Motion morphs the same card
  * across navigations rather than fading between disjoint cards.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { Container } from "@/components/layout/Container";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { LatestDrawCard } from "@/components/results/LatestDrawCard";
 import { NumberRow } from "@/components/results/NumberRow";
 import { games as mockGames } from "@/lib/games";
@@ -51,24 +53,16 @@ export default async function GameResultsPage({
 
   return (
     <>
-      <section className="py-12 md:py-16 border-b border-brand-border">
-        <Container>
-          <Link
-            href="/results"
-            className="inline-flex items-center gap-1.5 text-sm text-brand-ink-muted hover:text-brand-primary"
-          >
-            <ArrowLeft size={16} strokeWidth={1.75} />
-            All results
-          </Link>
-          <h1 className="text-5xl md:text-6xl mt-4">
-            {game.name} results
-          </h1>
-          <p className="mt-3 text-base text-brand-ink-muted max-w-xl">
-            {game.scheduleLabel}. Updated within minutes of the official NLA
-            draw.
-          </p>
-        </Container>
-      </section>
+      <PageHeader
+        eyebrow={game.scheduleLabel}
+        title={`${game.name} results`}
+        subtitle="Latest winning numbers, plus the full archive of past draws. Updated within minutes of each official NLA draw."
+        breadcrumbs={[
+          { label: "Home", href: "/" },
+          { label: "Results", href: "/results" },
+          { label: game.name },
+        ]}
+      />
 
       {latest && (
         <section className="py-12 md:py-16 bg-brand-paper-muted">
@@ -85,7 +79,7 @@ export default async function GameResultsPage({
 
       <section className="py-16 md:py-20">
         <Container>
-          <h2 className="font-display text-2xl md:text-3xl tracking-[-0.015em] mb-6">
+          <h2 className="font-display font-extrabold text-2xl md:text-3xl tracking-[-0.015em] mb-6">
             Archive
           </h2>
           {archive.length === 0 ? (

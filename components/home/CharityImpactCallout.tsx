@@ -12,26 +12,8 @@
  * practice.
  */
 import Link from "next/link";
-import { ArrowRight, Sparkles, ShieldCheck, FileText, Users } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import { Container } from "@/components/layout/Container";
-
-const PILLARS = [
-  {
-    icon: ShieldCheck,
-    title: "Independently audited",
-    body: "External auditors verify every cedi of giving, year on year. We don't self-report.",
-  },
-  {
-    icon: FileText,
-    title: "Publicly published",
-    body: "The full breakdown is in our annual report and on the About page when each fiscal year closes.",
-  },
-  {
-    icon: Users,
-    title: "Directed to community",
-    body: "Named programmes only — schools, clinics, and community projects across Ghana, never general buckets.",
-  },
-];
 
 export function CharityImpactCallout() {
   return (
@@ -72,25 +54,6 @@ export function CharityImpactCallout() {
               className="transition-transform group-hover:translate-x-0.5"
             />
           </Link>
-        </div>
-
-        <div className="relative grid gap-5 md:gap-6 md:grid-cols-3 mt-16 md:mt-20">
-          {PILLARS.map((p) => (
-            <article
-              key={p.title}
-              className="rounded-2xl border border-white/15 bg-white/[0.04] backdrop-blur-sm p-7"
-            >
-              <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/20 text-brand-secondary mb-5">
-                <p.icon size={20} strokeWidth={2} />
-              </div>
-              <h3 className="font-display font-extrabold text-lg text-white tracking-[-0.01em]">
-                {p.title}
-              </h3>
-              <p className="mt-2 text-sm text-white/70 leading-relaxed">
-                {p.body}
-              </p>
-            </article>
-          ))}
         </div>
       </Container>
     </section>
