@@ -24,12 +24,20 @@
 -- truncate table games restart identity cascade;
 
 -- ---------------------------------------------------------------------------
--- Games (11 active games, matches lib/games.ts)
--- 787, Atena, Caritas Lottery, and Super 6 were removed from the catalogue
--- on 2026-04-30 by owner direction.
+-- Games (active catalogue, matches lib/games.ts)
+--
+-- Removed by owner 2026-04-30: 787, Atena, Caritas Lottery, Super 6,
+-- plus the two USSD-only games (Lucky 3, Daywa 5/39 Direct) — the
+-- marketing site no longer surfaces USSD as a play channel.
+--
+-- The DELETE below cleans up the legacy USSD games from databases that
+-- were seeded before this change. Safe no-op on a fresh DB.
 --
 -- ON CONFLICT (slug) DO UPDATE so re-running refreshes the row contents.
 -- ---------------------------------------------------------------------------
+delete from games where slug in ('lucky-3', 'daywa-5-39-direct');
+
+
 insert into games (slug, name, hook, long_description, schedule, schedule_label, channel, channel_detail, prize_structure, featured, introduced_year, sort_order, logo_url) values
   ('national-week-lotto', 'National Week Lotto',
     'Ghana''s flagship game, running since December 1962.',
@@ -70,16 +78,6 @@ insert into games (slug, name, hook, long_description, schedule, schedule_label,
     'Run with Veterans Administration Ghana since July 2019.',
     'A partnership game launched with Veterans Administration Ghana. A portion of proceeds supports veteran welfare.',
     array[]::text[], 'Schedule TBC', 'standard', null, null, false, 2019, 80, '/games/vag-lotto.png'),
-
-  ('lucky-3', 'Lucky 3',
-    'Pick three lucky numbers, straight from your phone.',
-    'A mobile-phone game. Dial *987# to play, no agent needed. Drawn daily.',
-    array['daily'], 'Daily', 'ussd', '*987#', null, false, null, 110, '/games/lucky-3.png'),
-
-  ('daywa-5-39-direct', 'Daywa 5/39 Direct',
-    'The best odds in Ghana.',
-    'A direct-betting game with Direct 1-5, Perm, and Banker options. Dial *446# to play.',
-    array[]::text[], 'Schedule TBC', 'ussd', '*446#', 'Direct / Perm / Banker', false, null, 130, '/games/daywa-5-39-direct.png'),
 
   ('noon-rush', 'Noon Rush',
     'A midday play.',

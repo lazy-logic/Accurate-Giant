@@ -10,12 +10,11 @@
  * of the marketing site.
  */
 import Link from "next/link";
-import { LogOut, Newspaper, Trophy, MapPin, Layers } from "lucide-react";
+import { LogOut, Newspaper, Trophy, Layers } from "lucide-react";
 
 const NAV = [
   { href: "/admin", label: "Overview", icon: Layers },
   { href: "/admin/draws", label: "Draws", icon: Trophy },
-  { href: "/admin/agents", label: "Agents", icon: MapPin },
   { href: "/admin/posts", label: "Posts", icon: Newspaper },
 ];
 

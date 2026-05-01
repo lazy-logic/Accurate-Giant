@@ -18,7 +18,7 @@
  */
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin, Smartphone, Phone } from "lucide-react";
+import { ArrowRight, Smartphone } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { PhoneFrame } from "@/components/marketing/PhoneFrame";
 import { TypewriterRotate } from "@/components/marketing/TypewriterRotate";
@@ -164,17 +164,10 @@ export function Hero() {
         <div className="relative z-10 pt-14 md:pt-20 lg:pt-24 pb-16 md:pb-24 lg:pb-28 grid gap-14 lg:gap-10 lg:grid-cols-12 items-center lg:items-start">
           {/* ───── Copy column ───── */}
           <div className="lg:col-span-7">
-            {/* Eyebrow now carries the channel callout (was the NLA badge) */}
-            <div className="inline-flex flex-wrap items-center gap-x-3 gap-y-1 px-3.5 py-1.5 rounded-full border border-brand-border bg-brand-paper text-xs font-semibold text-brand-ink mb-7 shadow-soft">
-              <span className="inline-flex items-center gap-1.5">
-                <Smartphone size={13} strokeWidth={2.25} className="text-brand-primary" />
-                Play via the AG mobile app
-              </span>
-              <span className="text-brand-border">·</span>
-              <span className="inline-flex items-center gap-1.5">
-                <Phone size={13} strokeWidth={2.25} className="text-brand-primary" />
-                Or USSD on any phone
-              </span>
+            {/* Eyebrow — channel callout */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-border bg-brand-paper text-xs font-semibold text-brand-ink mb-7 shadow-soft">
+              <Smartphone size={13} strokeWidth={2.25} className="text-brand-primary" />
+              Play via the AG mobile app
             </div>
 
             <h1 className="text-5xl md:text-6xl xl:text-7xl text-brand-ink text-balance">
@@ -207,11 +200,10 @@ export function Hero() {
                 />
               </Link>
               <Link
-                href="/agents"
+                href="/games"
                 className="inline-flex items-center gap-2 h-12 px-7 rounded-full border border-brand-primary/40 text-brand-primary text-base font-semibold hover:bg-brand-paper-muted hover:border-brand-primary transition-all duration-150"
               >
-                <MapPin size={18} strokeWidth={2} />
-                Find an agent
+                Browse games
               </Link>
             </div>
           </div>

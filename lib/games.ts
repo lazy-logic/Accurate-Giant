@@ -1,5 +1,5 @@
 /**
- * Games catalogue — the 11 NLA-licensed draws Accurate Giant operates.
+ * Games catalogue — the NLA-licensed draws Accurate Giant operates.
  *
  * SOURCE: docs/content-inventory.md §1, derived from public/inspiration/nla-products/extracted.md.
  *
@@ -17,8 +17,11 @@
  *
  * Owner removed 787, Atena, Super 6, and Caritas Lottery from the live catalogue
  * (2026-04-30) — historical entries are out of seed.sql too.
+ *
+ * USSD-only games (Lucky 3, Daywa 5/39 Direct) removed by owner direction
+ * 2026-04-30 — the marketing site no longer surfaces USSD as a channel.
  */
-export type GameChannel = "standard" | "ussd" | "pos";
+export type GameChannel = "standard" | "pos";
 export type GameDay =
   | "monday"
   | "tuesday"
@@ -200,42 +203,6 @@ export const games: Game[] = [
     introducedYear: 2019,
     logoUrl: "/games/vag-lotto.png",
     ballColor: "#0f766e",
-  },
-  {
-    slug: "lucky-3",
-    name: "Lucky 3",
-    hook: "Pick three lucky numbers, straight from your phone.",
-    longDescription:
-      "A mobile-phone game. Dial *987# to play, no agent needed. Drawn daily.",
-    schedule: ["daily"],
-    scheduleLabel: "Daily",
-    drawTime: null,
-    priceGhs: null,
-    channel: "ussd",
-    channelDetail: "*987#",
-    prizeStructure: null,
-    featured: false,
-    introducedYear: null,
-    logoUrl: "/games/lucky-3.png",
-    ballColor: "#06b6d4",
-  },
-  {
-    slug: "daywa-5-39-direct",
-    name: "Daywa 5/39 Direct",
-    hook: "The best odds in Ghana.",
-    longDescription:
-      "A direct-betting game with Direct 1–5, Perm, and Banker options. Dial *446# to play.",
-    schedule: [],
-    scheduleLabel: "Schedule TBC",
-    drawTime: null,
-    priceGhs: null,
-    channel: "ussd",
-    channelDetail: "*446#",
-    prizeStructure: "Direct / Perm / Banker",
-    featured: false,
-    introducedYear: null,
-    logoUrl: "/games/daywa-5-39-direct.png",
-    ballColor: "#4f46e5",
   },
   {
     slug: "noon-rush",

@@ -6,6 +6,10 @@
  *
  * Day filter values are short codes ("mon", "tue", ...) NOT full day names,
  * so URLs stay short. The mapping to Game.schedule values lives below.
+ *
+ * Channel option `ussd` was retired 2026-04-30 — the marketing site no longer
+ * surfaces USSD as a play channel. The `pos` option stays in case the catalogue
+ * adds a POS-only game in future.
  */
 import type { Game, GameChannel, GameDay } from "./games";
 
@@ -23,7 +27,6 @@ export const DAY_OPTIONS: { code: string; day: GameDay; label: string; short: st
 export const CHANNEL_OPTIONS: { value: GameChannel | "all"; label: string }[] = [
   { value: "all", label: "All channels" },
   { value: "standard", label: "Standard" },
-  { value: "ussd", label: "USSD" },
   { value: "pos", label: "POS only" },
 ];
 
@@ -38,9 +41,7 @@ export function parseGameFilters(searchParams: Record<string, string | string[] 
 
   const channelRaw = searchParams.channel;
   const channel: GameChannel | "all" =
-    channelRaw === "standard" || channelRaw === "ussd" || channelRaw === "pos"
-      ? channelRaw
-      : "all";
+    channelRaw === "standard" || channelRaw === "pos" ? channelRaw : "all";
 
   return { day, channel };
 }

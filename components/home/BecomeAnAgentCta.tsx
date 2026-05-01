@@ -1,13 +1,8 @@
 /**
  * BecomeAnAgentCta — partnership / recruitment funnel.
  *
- * Pairs with AgentMapPreview in the closing rhythm of the page (one for
- * players, one for would-be agents). Light surface, business-pitch tone.
- *
- * Updated 2026-04-30: removed the placeholder stats column (Active agents
- * [TBC], Avg weekly earnings GHS [TBC], NLA-approved %). It carried fake
- * figures and contradicted the site-wide "no [TBC] numbers on display"
- * direction. Layout is now a centred single-column pitch.
+ * Closing section of the homepage — recruitment pitch for would-be agents.
+ * Light surface, business-pitch tone, centred single-column layout.
  */
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";

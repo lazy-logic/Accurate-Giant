@@ -7,8 +7,8 @@
  * the icons.
  *
  * Content adapted to our model:
- *   1. PICK YOUR GAME       — 15 NLA-licensed draws to choose from
- *   2. PLAY YOUR WAY        — Three channels (mobile app · USSD · agent).
+ *   1. PICK YOUR GAME       — NLA-licensed draws to choose from
+ *   2. PLAY YOUR WAY        — Two channels (mobile app · approved agent).
  *                              We deliberately do NOT direct toward an online
  *                              checkout — see ADR 0007.
  *   3. WATCH FOR THE DRAW   — Results land within minutes; per-game archive
@@ -42,14 +42,14 @@ const STEPS: Step[] = [
     numberShadow: "1",
     icon: Target,
     title: "Pick your game",
-    body: "Browse 11 NLA-licensed draws across daily, mid-week, and weekend slots. Pick what fits the day.",
+    body: "Browse our NLA-licensed draws across mid-week and weekend slots. Pick what fits the day.",
   },
   {
     number: "02",
     numberShadow: "2",
     icon: Smartphone,
     title: "Play your way",
-    body: "Use the AG mobile app, dial *987# from any phone, or visit an approved agent.",
+    body: "Use the AG mobile app, or visit an approved agent in your area.",
   },
   {
     number: "03",

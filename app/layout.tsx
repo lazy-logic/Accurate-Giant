@@ -41,14 +41,48 @@ export const metadata: Metadata = {
     template: "%s · Accurate Giant",
   },
   description:
-    "NLA-registered private lotto operator in Ghana. Eleven licensed draws across the week. Results, games, and our agent network. Operating under the National Lotto Act 2006 (Act 722).",
-  metadataBase: new URL("https://accurategiant.example"),
+    "NLA-registered private lotto operator in Ghana. NLA-licensed draws across the week. Results, games, and our agent network. Operating under the National Lotto Act 2006 (Act 722).",
+  metadataBase: new URL("https://accurategiant.com"),
   openGraph: {
     type: "website",
     locale: "en_GH",
     siteName: "Accurate Giant Company Ltd.",
   },
   robots: { index: true, follow: true },
+  // Favicons live under /public/favicon/. The .ico + apple-icon.png at
+  // app/ root are auto-emitted by Next; the entries below add the rest of
+  // the size set + the Android web-app manifest. See public/favicon/ for
+  // the source set.
+  manifest: "/favicon/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/android-icon-192x192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/favicon/apple-icon-57x57.png", sizes: "57x57" },
+      { url: "/favicon/apple-icon-60x60.png", sizes: "60x60" },
+      { url: "/favicon/apple-icon-72x72.png", sizes: "72x72" },
+      { url: "/favicon/apple-icon-76x76.png", sizes: "76x76" },
+      { url: "/favicon/apple-icon-114x114.png", sizes: "114x114" },
+      { url: "/favicon/apple-icon-120x120.png", sizes: "120x120" },
+      { url: "/favicon/apple-icon-144x144.png", sizes: "144x144" },
+      { url: "/favicon/apple-icon-152x152.png", sizes: "152x152" },
+      { url: "/favicon/apple-icon-180x180.png", sizes: "180x180" },
+    ],
+    other: [
+      {
+        rel: "msapplication-TileImage",
+        url: "/favicon/ms-icon-144x144.png",
+      },
+    ],
+  },
+  other: {
+    "msapplication-TileColor": "#013299",
+    "msapplication-config": "/favicon/browserconfig.xml",
+  },
 };
 
 // Viewport for proper mobile scaling across the responsive layouts.

@@ -17,17 +17,17 @@
  * elements inside.
  */
 import Link from "next/link";
-import { ArrowRight, Phone, Store, MapPin } from "lucide-react";
+import { ArrowRight, Store, MapPin } from "lucide-react";
 import type { Game } from "@/lib/games";
 import type { Draw } from "@/lib/results";
 import { Badge } from "@/components/ui/Badge";
 import { GameLogo } from "./GameLogo";
 
-const channelMeta = {
+const channelMeta: Record<string, { label: string; icon: typeof MapPin }> = {
   standard: { label: "Standard", icon: MapPin },
-  ussd: { label: "USSD", icon: Phone },
   pos: { label: "POS only", icon: Store },
 };
+const defaultChannel = channelMeta.standard;
 
 type GameTileProps = {
   game: Game;
@@ -36,7 +36,9 @@ type GameTileProps = {
 };
 
 export function GameTile({ game }: GameTileProps) {
-  const channel = channelMeta[game.channel];
+  // Fall back to the standard meta if Supabase returns a channel value we no
+  // longer surface (e.g. legacy `ussd` rows pre-2026-04-30 cleanup).
+  const channel = channelMeta[game.channel] ?? defaultChannel;
   const ChannelIcon = channel.icon;
 
   return (

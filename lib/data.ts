@@ -24,7 +24,7 @@ import {
   type GameDay,
 } from "./games";
 import { draws as mockDraws, type Draw } from "./results";
-import type { GameRow, DrawRow } from "./database.types";
+import type { GameRow, DrawRow, DrawSourceDb } from "./database.types";
 
 // ---------------------------------------------------------------------------
 // Error helper.
@@ -66,6 +66,18 @@ function reportSupabaseError(context: string, error: unknown): void {
     hint: e.hint,
   });
 }
+
+// ---------------------------------------------------------------------------
+// Retired-slug denylist.
+//
+// 2026-04-30 / 05-01: Lucky 3 + Daywa 5/39 Direct were removed from the live
+// catalogue. The Supabase rows persist until `supabase/seed.sql`'s cleanup
+// `DELETE` is re-applied — until then the public-facing read paths filter
+// these out so they don't reappear on /games or /results.
+//
+// Remove from this set once the DB cleanup has run.
+// ---------------------------------------------------------------------------
+const RETIRED_SLUGS = new Set(["lucky-3", "daywa-5-39-direct"]);
 
 // ---------------------------------------------------------------------------
 // Mappers — Supabase rows → app types. Keep schemas decoupled from UI types
@@ -121,10 +133,13 @@ export async function fetchGames(): Promise<Game[]> {
     reportSupabaseError("fetchGames", error);
     return mockGames;
   }
-  return (data as GameRow[]).map(mapGameRow);
+  return (data as GameRow[])
+    .filter((row) => !RETIRED_SLUGS.has(row.slug))
+    .map(mapGameRow);
 }
 
 export async function fetchGameBySlug(slug: string): Promise<Game | undefined> {
+  if (RETIRED_SLUGS.has(slug)) return undefined;
   if (!isSupabaseConfigured()) return mockGames.find((g) => g.slug === slug);
   const supabase = createServerClient(await cookies());
   const { data, error } = await supabase
@@ -240,7 +255,8 @@ export async function fetchAllDrawsSorted(limit = 50): Promise<Draw[]> {
   return drawsNarrow
     .map((d) => {
       const slug = slugById.get(d.game_id);
-      return slug ? mapDrawRow(d, slug) : null;
+      if (!slug || RETIRED_SLUGS.has(slug)) return null;
+      return mapDrawRow(d, slug);
     })
     .filter((d): d is Draw => d !== null);
 }
@@ -252,4 +268,109 @@ export async function fetchAllDrawsSorted(limit = 50): Promise<Draw[]> {
 export async function fetchRecentLatestDrawsAcrossGames(slugs: string[]): Promise<Draw[]> {
   const results = await Promise.all(slugs.map((s) => fetchLatestDraw(s)));
   return results.filter((d): d is Draw => d !== undefined);
+}
+
+// ---------------------------------------------------------------------------
+// Admin-only reads. Bypass the `published = true` filter so editors can see
+// drafts.
+// ---------------------------------------------------------------------------
+export type AdminDrawRow = Draw & {
+  id: string;
+  gameName: string;
+  published: boolean;
+  source: DrawSourceDb;
+};
+
+export async function fetchAllDrawsForAdmin(limit = 200): Promise<AdminDrawRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = createServerClient(await cookies());
+  const [gamesResult, drawsResult] = await Promise.all([
+    supabase.from("games").select("id, slug, name"),
+    supabase
+      .from("draws")
+      .select("*")
+      .order("draw_date", { ascending: false })
+      .limit(limit),
+  ]);
+  if (gamesResult.error || drawsResult.error || !gamesResult.data || !drawsResult.data) {
+    reportSupabaseError("fetchAllDrawsForAdmin (games)", gamesResult.error);
+    reportSupabaseError("fetchAllDrawsForAdmin (draws)", drawsResult.error);
+    return [];
+  }
+  const gamesNarrow = gamesResult.data as { id: string; slug: string; name: string }[];
+  const drawsNarrow = drawsResult.data as DrawRow[];
+  const gameById = new Map(gamesNarrow.map((g) => [g.id, g]));
+  return drawsNarrow
+    .map((d) => {
+      const game = gameById.get(d.game_id);
+      if (!game) return null;
+      return {
+        ...mapDrawRow(d, game.slug),
+        id: d.id,
+        gameName: game.name,
+        published: d.published,
+        source: d.source,
+      };
+    })
+    .filter((d): d is AdminDrawRow => d !== null);
+}
+
+export type AdminDrawDetail = {
+  id: string;
+  gameId: string;
+  gameSlug: string;
+  drawNumber: number;
+  drawDate: string;
+  drawnAt: string | null;
+  numbers: number[];
+  bonusNumbers: number[];
+  source: string;
+  published: boolean;
+};
+
+export async function fetchDrawByIdForAdmin(id: string): Promise<AdminDrawDetail | null> {
+  if (!isSupabaseConfigured()) return null;
+  const supabase = createServerClient(await cookies());
+  const { data, error } = await supabase
+    .from("draws")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error || !data) {
+    reportSupabaseError("fetchDrawByIdForAdmin", error);
+    return null;
+  }
+  const draw = data as DrawRow;
+  const { data: gameData } = await supabase
+    .from("games")
+    .select("slug")
+    .eq("id", draw.game_id)
+    .maybeSingle();
+  const slug = (gameData as { slug: string } | null)?.slug ?? "";
+  return {
+    id: draw.id,
+    gameId: draw.game_id,
+    gameSlug: slug,
+    drawNumber: draw.draw_number,
+    drawDate: draw.draw_date,
+    drawnAt: draw.drawn_at,
+    numbers: draw.numbers,
+    bonusNumbers: draw.bonus_numbers,
+    source: draw.source,
+    published: draw.published,
+  };
+}
+
+export async function fetchGamesForAdmin(): Promise<{ id: string; slug: string; name: string }[]> {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = createServerClient(await cookies());
+  const { data, error } = await supabase
+    .from("games")
+    .select("id, slug, name")
+    .order("sort_order", { ascending: true });
+  if (error || !data) {
+    reportSupabaseError("fetchGamesForAdmin", error);
+    return [];
+  }
+  return data as { id: string; slug: string; name: string }[];
 }

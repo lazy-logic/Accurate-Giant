@@ -1,12 +1,11 @@
 /**
  * DownloadAppCta — channel-led CTA section.
  *
- * Three ways to play, three buttons. Sits mid-page after Featured Games so
- * the visitor — having just seen the game catalogue — gets the obvious "OK
- * how do I actually play?" answer.
+ * Two ways to play, two cards. Sits mid-page after Featured Games so the
+ * visitor — having just seen the game catalogue — gets the obvious "OK how
+ * do I actually play?" answer.
  *
- * Layout: split column. Copy left, phone-frame teaser right with a
- * floating "USSD" pill behind it for the alt-channel hint.
+ * Layout: split column. Copy left, phone-frame teaser right.
  *
  * Background: dark navy with a soft mesh gradient — matches the Charity
  * Callout's dark surface so the page reads in deliberate dark/light beats.
@@ -16,7 +15,7 @@
  * but link to a fragment.
  */
 import Link from "next/link";
-import { Smartphone, Phone, MapPin, ArrowRight } from "lucide-react";
+import { Smartphone, MapPin, ArrowRight } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { PhoneFrame } from "@/components/marketing/PhoneFrame";
 
@@ -27,7 +26,21 @@ const PRIMARY_SCREENSHOT = "/app-screenshot/app-game-detail.jpg";
 
 export function DownloadAppCta() {
   return (
-    <section className="relative py-24 md:py-32 bg-brand-ink text-white overflow-hidden">
+    /*
+     * Asymmetric vertical padding by design: the section has a normal top
+     * gutter but `pb-0` so the phone in the right column reads as RISING
+     * out of the bottom edge instead of floating mid-section. Each grid
+     * cell controls its own bottom alignment — copy keeps its own bottom
+     * padding, the phone column uses items-end so its child sits flush
+     * with the section baseline.
+     */
+    /*
+     * `overflow-visible` (not hidden) so the phone can protrude above the
+     * section's top edge. The mesh/grid background layers are positioned
+     * with inset-0 + -z-10 so they stay contained within the section bounds
+     * regardless.
+     */
+    <section className="relative pt-12 md:pt-14 pb-0 bg-brand-ink text-white">
       {/* Mesh background */}
       <div
         aria-hidden
@@ -40,56 +53,39 @@ export function DownloadAppCta() {
       />
 
       <Container>
-        <div className="grid gap-12 lg:gap-16 lg:grid-cols-12 items-center">
-          {/* Copy */}
-          <div className="lg:col-span-7">
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-secondary mb-5">
-              Three ways to play
+        <div className="grid gap-8 lg:gap-10 lg:grid-cols-12">
+          {/* Copy — bottom padding kept tight; the phone column drives the
+              section's overall height on lg+, copy holds itself just shy of
+              that baseline. */}
+          <div className="lg:col-span-7 pb-12 md:pb-14">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-secondary mb-3">
+              Two ways to play
             </p>
-            <h2 className="font-display font-extrabold text-4xl md:text-5xl xl:text-6xl leading-[1.05] tracking-[-0.025em] text-white text-balance">
+            <h2 className="font-display font-extrabold text-3xl md:text-4xl xl:text-5xl leading-[1.05] tracking-[-0.025em] text-white text-balance">
               Pick your numbers from anywhere in Ghana.
             </h2>
-            <p className="mt-6 text-base md:text-lg text-white/70 max-w-xl text-balance">
-              Same NLA-licensed draws, three ways in. Use whichever channel
-              fits the day.
+            <p className="mt-4 text-sm md:text-base text-white/70 max-w-xl text-balance">
+              Same NLA-licensed draws, two ways in. Use whichever fits the day.
             </p>
 
-            {/* Cards: horizontal layout on mobile (icon-left + content-right
-                so each card is half the height), vertical on sm+. */}
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {/* Cards: narrower than the copy column so they read as compact
+                buttons instead of stretched bars. Horizontal layout on
+                mobile (icon-left + content-right so each card is half the
+                height), vertical on sm+. */}
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
               {/* Channel: Mobile app */}
               <Link
                 href="#download-android"
-                className="group rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-4 sm:flex-col sm:items-start sm:gap-0"
+                className="group rounded-2xl border border-white/15 bg-white/5 p-3.5 sm:p-4 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-3 sm:flex-col sm:items-start sm:gap-0"
               >
-                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-3">
-                  <Smartphone size={22} strokeWidth={1.75} />
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-2">
+                  <Smartphone size={20} strokeWidth={1.75} />
                 </span>
                 <span className="flex-1 min-w-0">
-                  <span className="block font-bold text-base text-white">Mobile app</span>
-                  <span className="block text-xs text-white/60 mt-0.5 sm:mt-1">Android &amp; iOS</span>
-                  <span className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
+                  <span className="block font-bold text-sm sm:text-base text-white">Mobile app</span>
+                  <span className="block text-xs text-white/60 mt-0.5">Android &amp; iOS</span>
+                  <span className="mt-1.5 sm:mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
                     Download
-                    <ArrowRight size={12} strokeWidth={2} />
-                  </span>
-                </span>
-              </Link>
-
-              {/* Channel: USSD */}
-              <Link
-                href="/how-to-play"
-                className="group rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-4 sm:flex-col sm:items-start sm:gap-0"
-              >
-                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-3">
-                  <Phone size={22} strokeWidth={1.75} />
-                </span>
-                <span className="flex-1 min-w-0">
-                  <span className="block font-bold text-base text-white">USSD</span>
-                  <span className="block text-xs text-white/60 mt-0.5 sm:mt-1 tnum">
-                    Dial *987# or *446#
-                  </span>
-                  <span className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
-                    How it works
                     <ArrowRight size={12} strokeWidth={2} />
                   </span>
                 </span>
@@ -97,50 +93,47 @@ export function DownloadAppCta() {
 
               {/* Channel: Agent */}
               <Link
-                href="/agents"
-                className="group rounded-2xl border border-white/15 bg-white/5 p-4 sm:p-5 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-4 sm:flex-col sm:items-start sm:gap-0"
+                href="/how-to-play"
+                className="group rounded-2xl border border-white/15 bg-white/5 p-3.5 sm:p-4 hover:bg-white/10 hover:border-white/25 transition-all flex items-center gap-3 sm:flex-col sm:items-start sm:gap-0"
               >
-                <span className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-3">
-                  <MapPin size={22} strokeWidth={1.75} />
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-secondary/15 text-brand-secondary flex-shrink-0 sm:w-auto sm:h-auto sm:bg-transparent sm:p-0 sm:rounded-none sm:mb-2">
+                  <MapPin size={20} strokeWidth={1.75} />
                 </span>
                 <span className="flex-1 min-w-0">
-                  <span className="block font-bold text-base text-white">In person</span>
-                  <span className="block text-xs text-white/60 mt-0.5 sm:mt-1">Approved agents</span>
-                  <span className="mt-2 sm:mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
-                    Find one
+                  <span className="block font-bold text-sm sm:text-base text-white">In person</span>
+                  <span className="block text-xs text-white/60 mt-0.5">Approved agents</span>
+                  <span className="mt-1.5 sm:mt-2 inline-flex items-center gap-1 text-xs font-semibold text-brand-secondary group-hover:gap-2 transition-all">
+                    How it works
                     <ArrowRight size={12} strokeWidth={2} />
                   </span>
                 </span>
               </Link>
             </div>
 
-            <p className="mt-7 text-xs text-white/50 uppercase tracking-wider">
+            <p className="mt-5 text-xs text-white/50 uppercase tracking-wider">
               Approved channels only ·{" "}
               <span className="text-brand-danger font-bold">18+</span>
             </p>
           </div>
 
-          {/* Phone teaser */}
-          <div className="lg:col-span-5 hidden lg:flex items-center justify-center">
+          {/* Phone teaser — bottom-aligned (sits flush with the section
+              baseline because section is pb-0) AND lifted with a negative
+              top margin so it protrudes above the section's top edge into
+              the lighter section above. Section uses overflow-visible so
+              the protruding portion isn't clipped. */}
+          <div className="lg:col-span-5 hidden lg:flex items-end justify-center -mt-20 xl:-mt-28">
             <div className="relative">
               <div
                 aria-hidden
-                className="absolute -inset-12 -z-10 rounded-[3rem] bg-brand-secondary/20 blur-3xl"
+                className="absolute -inset-10 -z-10 rounded-[3rem] bg-brand-secondary/20 blur-3xl"
               />
               <PhoneFrame
                 src={PRIMARY_SCREENSHOT}
                 alt="Accurate Giant mobile app game detail screen"
-                width={280}
-                height={580}
+                width={220}
+                height={460}
                 tilt={4}
               />
-              {/* Floating USSD pill behind */}
-              <div className="absolute -left-10 top-16 -rotate-6 px-4 py-2.5 rounded-full bg-brand-secondary text-brand-ink font-bold text-sm shadow-lifted tnum">
-                *987#
-              </div>
-              <div className="absolute -right-6 bottom-24 rotate-3 px-4 py-2.5 rounded-full bg-white text-brand-primary font-bold text-sm shadow-lifted tnum">
-                *446#
-              </div>
             </div>
           </div>
         </div>

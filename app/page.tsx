@@ -6,12 +6,11 @@
  *   2. WeekSchedule          — DARK ink, week's draws as coloured ball tiles
  *   3. ResultsWidget         — sunken with dot pattern (data feel)
  *   4. FeaturedGames         — light with grid pattern
- *   5. DownloadAppCta        — DARK navy, three ways to play
+ *   5. DownloadAppCta        — DARK navy, two ways to play
  *   6. TrustStrip            — light band
  *   7. WinnersStories        — soft cyan-mesh diagonal
  *   8. CharityImpactCallout  — DARK navy with mega numeric
- *   9. BecomeAnAgentCta      — light grey, partnership pitch
- *  10. AgentLocatorCta       — light card with map dots
+ *   9. BecomeAnAgentCta      — light grey, partnership pitch (closes the page)
  *
  * Each section component owns its background, padding, and Container.
  * This file should stay almost empty — sections, not styles, are what
@@ -25,7 +24,6 @@ import { TrustStrip } from "@/components/layout/TrustStrip";
 import { WinnersStories } from "@/components/home/WinnersStories";
 import { CharityImpactCallout } from "@/components/home/CharityImpactCallout";
 import { BecomeAnAgentCta } from "@/components/home/BecomeAnAgentCta";
-import { AgentMapPreview } from "@/components/home/AgentMapPreview";
 
 export default function HomePage() {
   return (
@@ -38,7 +36,6 @@ export default function HomePage() {
       <WinnersStories />
       <CharityImpactCallout />
       <BecomeAnAgentCta />
-      <AgentMapPreview />
     </>
   );
 }

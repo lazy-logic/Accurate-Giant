@@ -15,6 +15,15 @@ import { Container } from "@/components/layout/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { NLA_REGISTER_URL } from "@/lib/regulatory";
 
+// Google Maps embed for the head-office location. Uses the `q=` query
+// parameter so we don't have to compute a place_id / pb=…cid… URL — Maps
+// resolves the search server-side. Loading is lazy so the iframe doesn't
+// block first paint. The `z=14` query param locks an initial zoom; a
+// transparent overlay blocks pointer events so visitors can't pan or
+// scroll-zoom — the map reads as a static reference image.
+const OFFICE_QUERY = "Accurate Giant Company, New Edubiase, Adansi South, Ashanti Region, Ghana";
+const MAP_EMBED_SRC = `https://www.google.com/maps?q=${encodeURIComponent(OFFICE_QUERY)}&z=14&output=embed`;
+
 export const metadata: Metadata = {
   title: "Contact",
   description:
@@ -203,6 +212,44 @@ export default function ContactPage() {
             </aside>
           </div>
         </Container>
+      </section>
+
+      {/* Map — heading inside Container, but the iframe itself breaks the
+          Container width and runs full-bleed across the viewport. Half the
+          previous height for a tighter strip. Lazy-loaded so it doesn't
+          block initial render. */}
+      <section className="pb-20 md:pb-24" aria-labelledby="contact-map-heading">
+        <Container>
+          <div className="mb-5">
+            <p className="text-xs font-bold uppercase tracking-[0.25em] text-brand-primary mb-2">
+              Find us
+            </p>
+            <h2
+              id="contact-map-heading"
+              className="font-display font-extrabold text-2xl md:text-3xl text-brand-ink"
+            >
+              New Edubiase, Ashanti Region.
+            </h2>
+          </div>
+        </Container>
+
+        {/* Full-bleed map strip — outside the Container so it edges the
+            viewport. Top/bottom borders give it visual containment without
+            losing the full-width feel. The transparent overlay sits on top
+            of the iframe to absorb every pointer event — no panning, no
+            scroll-zoom, no info-card clicks. The map reads as a static
+            reference image. */}
+        <div className="relative overflow-hidden border-y border-brand-border bg-brand-paper-muted">
+          <iframe
+            title="Map showing the Accurate Giant office in New Edubiase, Ashanti Region, Ghana"
+            src={MAP_EMBED_SRC}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            className="w-full h-[180px] md:h-[230px] block"
+            allowFullScreen
+          />
+          <div aria-hidden className="absolute inset-0 pointer-events-auto bg-transparent" />
+        </div>
       </section>
     </>
   );

@@ -66,9 +66,8 @@ const SECTIONS: LegalSection[] = [
       <>
         <p>
           Tickets and plays must be purchased through approved channels: the
-          AG mobile app, USSD codes published on this site, or an NLA-approved
-          agent. Tickets purchased through unauthorised channels are not
-          recognised.
+          AG mobile app or an NLA-approved agent. Tickets purchased through
+          unauthorised channels are not recognised.
         </p>
         <p>
           Prize claims must be submitted within the period specified by the

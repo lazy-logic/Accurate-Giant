@@ -79,25 +79,6 @@ function buildDrawsForDay(
   });
 }
 
-/** Daily games — most recent is today, then one per day back. */
-function buildDailyDraws(
-  gameSlug: string,
-  startingDrawNumber: number,
-  numberSets: number[][],
-): Draw[] {
-  const today = new Date();
-  return numberSets.map((numbers, i) => {
-    const d = new Date(today);
-    d.setDate(d.getDate() - i);
-    return {
-      gameSlug,
-      drawNumber: startingDrawNumber - i,
-      drawDate: iso(d),
-      numbers,
-    };
-  });
-}
-
 export const draws: Draw[] = [
   ...buildDrawsForDay("national-week-lotto", DOW.sat, 2154, [
     [12, 27, 34, 56, 78],
@@ -131,11 +112,6 @@ export const draws: Draw[] = [
     [5, 14, 29, 48, 71],
     [16, 28, 39, 55, 80],
     [1, 26, 42, 63, 85],
-  ]),
-  ...buildDailyDraws("lucky-3", 4012, [
-    [3, 7, 9],
-    [1, 4, 8],
-    [2, 5, 6],
   ]),
 ];
 

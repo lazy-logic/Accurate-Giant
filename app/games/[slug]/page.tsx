@@ -6,14 +6,13 @@
  * still works with Supabase: Next builds the routes from the games table at
  * build, and ISR refreshes them on demand once draws update.
  *
- * The CTA in the hero is channel-aware: standard games go to the agent locator,
- * USSD games show the dial code, POS-only games (Super 6) point at the
- * how-to-play guide.
+ * The CTA in the hero is channel-aware: standard games and POS-only games
+ * both point at the how-to-play guide.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, MapPin, Phone, Store } from "lucide-react";
+import { ArrowRight, MapPin, Store } from "lucide-react";
 import { Container } from "@/components/layout/Container";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Badge } from "@/components/ui/Badge";
@@ -45,11 +44,11 @@ export async function generateMetadata({
   };
 }
 
-const channelMeta = {
+const channelMeta: Record<string, { label: string; icon: typeof MapPin }> = {
   standard: { label: "Standard", icon: MapPin },
-  ussd: { label: "USSD", icon: Phone },
   pos: { label: "POS only", icon: Store },
 };
+const defaultChannel = channelMeta.standard;
 
 export default async function GameDetailPage({
   params,
@@ -61,11 +60,12 @@ export default async function GameDetailPage({
   if (!game) notFound();
 
   const draws = await fetchDrawsForGame(game.slug, 5);
-  const channel = channelMeta[game.channel];
+  // Defensive fallback for legacy channel values (e.g. `ussd` rows in
+  // Supabase from before the 2026-04-30 catalogue cleanup).
+  const channel = channelMeta[game.channel] ?? defaultChannel;
   const ChannelIcon = channel.icon;
 
   const isPosOnly = game.channel === "pos";
-  const isUssdOnly = game.channel === "ussd";
 
   return (
     <>
@@ -99,31 +99,13 @@ export default async function GameDetailPage({
                 )}
               </div>
               <div className="mt-8">
-                {isPosOnly ? (
-                  <Link
-                    href="/how-to-play"
-                    className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
-                  >
-                    How to play via POS
-                    <ArrowRight size={18} strokeWidth={2} />
-                  </Link>
-                ) : isUssdOnly ? (
-                  <Link
-                    href="/how-to-play"
-                    className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
-                  >
-                    How to play via USSD ({game.channelDetail})
-                    <ArrowRight size={18} strokeWidth={2} />
-                  </Link>
-                ) : (
-                  <Link
-                    href={`/agents?game=${game.slug}`}
-                    className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
-                  >
-                    <MapPin size={18} strokeWidth={2} />
-                    Find an agent
-                  </Link>
-                )}
+                <Link
+                  href="/how-to-play"
+                  className="inline-flex items-center gap-2 h-12 px-7 rounded-full bg-brand-primary text-white text-base font-semibold hover:bg-[#01277a] shadow-soft transition-all"
+                >
+                  {isPosOnly ? "How to play via POS" : "How to play"}
+                  <ArrowRight size={18} strokeWidth={2} />
+                </Link>
               </div>
             </div>
             <div className="md:col-span-5">
@@ -153,16 +135,12 @@ export default async function GameDetailPage({
             {[
               {
                 n: "1",
-                title: isUssdOnly
-                  ? `Dial ${game.channelDetail}`
-                  : isPosOnly
-                    ? "Visit a POS terminal"
-                    : "Find an agent or open the app",
-                body: isUssdOnly
-                  ? "Use any phone, smart or basic. The menu walks you through everything."
-                  : isPosOnly
-                    ? "Approved POS terminals only. Look for the NLA-licensed sticker."
-                    : "Visit an approved agent in your area, or play through the Accurate Giant mobile app.",
+                title: isPosOnly
+                  ? "Visit a POS terminal"
+                  : "Open the app or visit an agent",
+                body: isPosOnly
+                  ? "Approved POS terminals only. Look for the NLA-licensed sticker."
+                  : "Play through the Accurate Giant mobile app, or visit an approved agent in your area.",
               },
               {
                 n: "2",

@@ -5,7 +5,8 @@
  * Counts come from lib/data.ts so they reflect Supabase when configured,
  * mocks otherwise.
  *
- * Real CRUD pages at /admin/draws, /admin/agents, /admin/posts arrive next.
+ * /admin/draws is the live winning-numbers editor. /admin/posts is still
+ * pending.
  */
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -19,7 +20,6 @@ export default async function AdminDashboardPage() {
 
   const TILES = [
     { href: "/admin/draws", label: "Draws", count: draws.length, action: "Publish a result" },
-    { href: "/admin/agents", label: "Agents", count: 0, action: "Add an agent" },
     { href: "/admin/posts", label: "Posts", count: 0, action: "Write a post" },
   ];
 
@@ -29,10 +29,10 @@ export default async function AdminDashboardPage() {
         Overview
       </h1>
       <p className="text-sm text-brand-ink-muted mb-8">
-        Manage results, agents, and posts. {games.length} games configured.
+        Manage results and posts. {games.length} games configured.
       </p>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2">
         {TILES.map((t) => (
           <Link
             key={t.href}
@@ -56,9 +56,9 @@ export default async function AdminDashboardPage() {
           Not yet implemented
         </p>
         <ul className="text-sm text-brand-ink space-y-1.5">
-          <li>• CRUD on /admin/draws, /admin/agents, /admin/posts</li>
+          <li>• CRUD on /admin/posts</li>
           <li>• Audit logging on every write</li>
-          <li>• Results-pipeline trigger (manual ingest button)</li>
+          <li>• Results-pipeline trigger (automatic NLA ingest)</li>
           <li>• Multi-editor role narrowing on RLS policies</li>
         </ul>
       </section>

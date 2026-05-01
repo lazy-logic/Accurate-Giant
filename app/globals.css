@@ -208,15 +208,3 @@
   animation: hero-orb-a 20s ease-in-out infinite;
   will-change: transform, opacity;
 }
-
-/*
- * Mapbox custom markers (see components/agents/AgentMap.tsx).
- * Hover handled by Tailwind classes on the element; active state needs to
- * apply via a real class (not inline style) so it doesn't flicker against
- * the hover transform.
- */
-.agent-pin--active {
-  transform: scale(1.3) !important;
-  z-index: 10;
-  box-shadow: 0 0 0 6px rgba(0, 185, 239, 0.25), 0 6px 16px rgba(1, 50, 153, 0.55) !important;
-}
